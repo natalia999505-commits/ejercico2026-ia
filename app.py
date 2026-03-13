@@ -2,7 +2,6 @@ import streamlit as st
 
 st.set_page_config(
     page_title="¿Amigos digitales o riesgos invisibles?",
-    page_icon="🧠",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -24,7 +23,7 @@ st.markdown(
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap');
 
-        html, body, [class*="css"]  {
+        html, body, [class*="css"] {
             font-family: 'Inter', sans-serif;
         }
 
@@ -33,26 +32,30 @@ st.markdown(
             color: #111111;
         }
 
+        [data-testid="stHeader"] {
+            height: 0rem;
+        }
+
         .block-container {
-            padding-top: 1.2rem;
-            padding-bottom: 1.2rem;
+            padding-top: 0.4rem !important;
+            padding-bottom: 0.8rem !important;
             max-width: 1200px;
         }
 
         .section-wrap {
-            min-height: 86vh;
+            min-height: 78vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: fadeSlide 0.5s ease;
+            animation: fadeSlide 0.45s ease;
         }
 
         .section-card {
             width: 100%;
-            background: rgba(255,255,255,0.72);
+            background: rgba(255,255,255,0.78);
             border: 1px solid rgba(0,0,0,0.08);
             border-radius: 28px;
-            padding: 3.2rem 3.2rem 2.5rem 3.2rem;
+            padding: 2.3rem 2.5rem 2rem 2.5rem;
             box-shadow: 0 10px 35px rgba(0,0,0,0.06);
             backdrop-filter: blur(10px);
         }
@@ -62,7 +65,7 @@ st.markdown(
             text-transform: uppercase;
             font-size: 0.75rem;
             color: #666;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
             font-weight: 600;
         }
 
@@ -87,8 +90,8 @@ st.markdown(
             text-align: right;
             font-size: 1rem;
             color: #4b4b4b;
-            margin-top: 1.25rem;
-            margin-bottom: 2rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
             font-style: italic;
         }
 
@@ -109,8 +112,8 @@ st.markdown(
         }
 
         .bullet-box {
-            margin-top: 1.3rem;
-            padding: 1.2rem 1.3rem;
+            margin-top: 1.2rem;
+            padding: 1.1rem 1.2rem;
             border-radius: 18px;
             background: rgba(17,17,17,0.03);
             border: 1px solid rgba(17,17,17,0.07);
@@ -126,7 +129,7 @@ st.markdown(
         .progress-wrap {
             display: flex;
             justify-content: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.4rem;
         }
 
         .progress-pill {
@@ -136,9 +139,9 @@ st.markdown(
             background: rgba(255,255,255,0.7);
             border: 1px solid rgba(0,0,0,0.07);
             border-radius: 999px;
-            padding: 0.55rem 0.9rem;
+            padding: 0.45rem 0.85rem;
             box-shadow: 0 4px 18px rgba(0,0,0,0.05);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: #444;
         }
 
@@ -160,54 +163,17 @@ st.markdown(
             margin-bottom: 1rem;
         }
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(20,20,20,0.30);
-            backdrop-filter: blur(10px);
-            z-index: 999998;
-        }
-
-        .modal-card {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: min(860px, 92vw);
-            max-height: 82vh;
-            overflow-y: auto;
-            background: rgba(255,255,255,0.95);
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 24px;
-            box-shadow: 0 18px 60px rgba(0,0,0,0.16);
-            padding: 1.6rem 1.6rem 1.2rem 1.6rem;
-            z-index: 999999;
-        }
-
-        .modal-title {
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin-bottom: 0.8rem;
-            padding-right: 2rem;
-        }
-
-        .modal-body {
-            font-family: 'Libre Baskerville', serif;
-            line-height: 1.85;
-            color: #222;
-        }
-
         .footer-mini {
             text-align: center;
             color: #666;
             font-size: 0.9rem;
-            margin-top: 1rem;
+            margin-top: 0.8rem;
         }
 
         @keyframes fadeSlide {
             from {
                 opacity: 0;
-                transform: translateY(16px);
+                transform: translateY(12px);
             }
             to {
                 opacity: 1;
@@ -344,7 +310,7 @@ sections = [
         "label": "Referencias",
         "title": "Referencias utilizadas",
         "body": """
-        Haz clic en cada referencia para abrir un resumen en una ventana modal con fondo desenfocado.
+        Haz clic en cada referencia para abrir un resumen en una ventana emergente.
         """,
     },
 ]
@@ -415,6 +381,18 @@ def go_next():
         st.session_state.page += 1
 
 
+@st.dialog("Resumen de referencia", width="large")
+def show_reference_dialog(idx: int):
+    ref = references[idx]
+    st.markdown(f"### {ref['short']}")
+    st.write(ref["full"])
+    st.markdown("---")
+    st.write(ref["summary"])
+    if st.button("Cerrar", key=f"close_dialog_{idx}", use_container_width=True):
+        st.session_state.selected_ref = None
+        st.rerun()
+
+
 current = sections[st.session_state.page]
 
 # -----------------------------
@@ -450,16 +428,19 @@ elif current["label"] == "Ideas clave":
 elif current["label"] == "Referencias":
     st.markdown(f'<div class="section-title">{current["title"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="body-text">{current["body"]}</div>', unsafe_allow_html=True)
-    st.markdown('<div class="ref-note">Cada botón abre un resumen emergente de la referencia correspondiente.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="ref-note">Cada botón abre un resumen legible y luego puedes cerrarlo.</div>', unsafe_allow_html=True)
 
     for i, ref in enumerate(references):
         c1, c2 = st.columns([5, 1])
         with c1:
-            st.markdown(f'<div class="body-text" style="font-size:0.95rem; line-height:1.7;">{ref["full"]}</div>', unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="body-text" style="font-size:0.95rem; line-height:1.7;">{ref["full"]}</div>',
+                unsafe_allow_html=True,
+            )
         with c2:
             if st.button("Ver resumen", key=f"ref_{i}", use_container_width=True):
                 st.session_state.selected_ref = i
-                st.rerun()
+
 else:
     st.markdown(f'<div class="section-title">{current["title"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="body-text">{current["body"]}</div>', unsafe_allow_html=True)
@@ -477,7 +458,7 @@ with left:
     st.button("← Anterior", on_click=go_prev, use_container_width=True, disabled=st.session_state.page == 0)
 with center:
     st.markdown(
-        f'<div class="footer-mini">Navegación por pasos · vista tipo presentación · una sección por pantalla</div>',
+        '<div class="footer-mini">Navegación por pasos · vista tipo presentación · una sección por pantalla</div>',
         unsafe_allow_html=True,
     )
 with right:
@@ -489,24 +470,10 @@ with right:
     )
 
 # -----------------------------
-# MODAL DE REFERENCIAS
+# DIÁLOGO DE REFERENCIAS
 # -----------------------------
 if st.session_state.selected_ref is not None:
-    ref = references[st.session_state.selected_ref]
-
-    st.markdown('<div class="modal-overlay"></div>', unsafe_allow_html=True)
-    st.markdown('<div class="modal-card">', unsafe_allow_html=True)
-
-    top1, top2 = st.columns([12, 1])
-    with top1:
-        st.markdown(f'<div class="modal-title">{ref["full"]}</div>', unsafe_allow_html=True)
-    with top2:
-        if st.button("✕", key="close_modal"):
-            st.session_state.selected_ref = None
-            st.rerun()
-
-    st.markdown(f'<div class="modal-body">{ref["summary"]}</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    show_reference_dialog(st.session_state.selected_ref)
 
 # -----------------------------
 # PIE DE APP
