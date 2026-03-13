@@ -6,18 +6,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# -----------------------------
-# ESTADO
-# -----------------------------
 if "page" not in st.session_state:
     st.session_state.page = 0
 
 if "selected_ref" not in st.session_state:
     st.session_state.selected_ref = None
 
-# -----------------------------
-# ESTILOS
-# -----------------------------
 st.markdown(
     """
     <style>
@@ -32,39 +26,57 @@ st.markdown(
             color: #111111;
         }
 
-        [data-testid="stHeader"] {
-            display: none;
-        }
-
-        [data-testid="stToolbar"] {
-            display: none;
-        }
-
+        [data-testid="stHeader"],
+        [data-testid="stToolbar"],
         [data-testid="stDecoration"] {
-            display: none;
+            display: none !important;
+            height: 0 !important;
         }
 
-        #MainMenu {
+        #MainMenu, footer {
             visibility: hidden;
         }
 
-        footer {
-            visibility: hidden;
+        .stApp > div:first-child,
+        .main,
+        section[data-testid="stMain"] {
+            padding-top: 0 !important;
+            margin-top: 0 !important;
         }
 
         .block-container {
-            padding-top: 0rem !important;
-            padding-bottom: 0.4rem !important;
+            padding-top: 0 !important;
+            padding-bottom: 0.35rem !important;
+            margin-top: 0 !important;
             max-width: 1200px;
         }
 
-        .section-wrap {
-            min-height: 78vh;
+        .progress-wrap {
             display: flex;
-            align-items: center;
             justify-content: center;
-            animation: fadeSlide 0.45s ease;
-            margin-top: -1rem;
+            margin: 0 0 0.25rem 0;
+            padding: 0;
+        }
+
+        .progress-pill {
+            display: inline-flex;
+            gap: 0.5rem;
+            align-items: center;
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(0,0,0,0.07);
+            border-radius: 999px;
+            padding: 0.4rem 0.8rem;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+            font-size: 0.88rem;
+            color: #444;
+        }
+
+        .section-wrap {
+            min-height: auto;
+            display: block;
+            margin: 0 !important;
+            padding: 0 !important;
+            animation: fadeSlide 0.35s ease;
         }
 
         .section-card {
@@ -72,9 +84,10 @@ st.markdown(
             background: rgba(255,255,255,0.78);
             border: 1px solid rgba(0,0,0,0.08);
             border-radius: 28px;
-            padding: 2.1rem 2.4rem 1.9rem 2.4rem;
+            padding: 2rem 2.35rem 1.9rem 2.35rem;
             box-shadow: 0 10px 35px rgba(0,0,0,0.06);
             backdrop-filter: blur(10px);
+            margin-top: 0 !important;
         }
 
         .eyebrow {
@@ -112,7 +125,7 @@ st.markdown(
             font-style: italic;
         }
 
-        .body-text {
+        .body-text, .lead {
             font-family: 'Libre Baskerville', serif;
             font-size: 1rem;
             line-height: 1.95;
@@ -121,11 +134,7 @@ st.markdown(
         }
 
         .lead {
-            font-family: 'Libre Baskerville', serif;
             font-size: 1.08rem;
-            line-height: 1.95;
-            color: #222;
-            max-width: 980px;
         }
 
         .bullet-box {
@@ -141,26 +150,6 @@ st.markdown(
             padding-left: 1.2rem;
             line-height: 1.9;
             font-family: 'Libre Baskerville', serif;
-        }
-
-        .progress-wrap {
-            display: flex;
-            justify-content: center;
-            margin-top: 0rem;
-            margin-bottom: 0rem;
-        }
-
-        .progress-pill {
-            display: inline-flex;
-            gap: 0.5rem;
-            align-items: center;
-            background: rgba(255,255,255,0.7);
-            border: 1px solid rgba(0,0,0,0.07);
-            border-radius: 999px;
-            padding: 0.4rem 0.8rem;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.05);
-            font-size: 0.88rem;
-            color: #444;
         }
 
         .key-card {
@@ -217,43 +206,42 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# -----------------------------
-# CONTENIDO
-# -----------------------------
 sections = [
     {
-        "label": "Portada",
+        "label": "Título del Artículo",
         "title": "¿Amigos digitales o riesgos invisibles? El desafío ético de los chatbots en salud mental",
-        "quote": "La inteligencia artificial conversa, pero la inteligencia humana comprende las consecuencias",
+        "quote": "La inteligencia artificial conversa, pero la inteligencia humana comprende las consecuencias.",
+    },
+    {
+        "label": "Introducción",
+        "title": "Introducción",
         "body": """
-        La forma en que buscamos apoyo emocional está cambiando radicalmente. Hemos pasado de sistemas digitales rígidos a una era dominada por Modelos de Lenguaje Extensos (LLM), una tecnología que ha remodelado la interacción humana con las máquinas. Hoy, los chatbots ya no son solo herramientas que dan información; muchas personas los perciben como "compañeros, amigos o socios" de IA.
-        <br><br>
-        Sin embargo, este lazo digital no está libre de peligros. Cuando estas herramientas se despliegan en situaciones de "alta vulnerabilidad clínica", aparecen riesgos críticos que no siempre son evidentes a simple vista. La gran pregunta que surge es si la fluidez con la que habla una IA es garantía suficiente para proteger la seguridad de un paciente en terapia.
+        La forma en que buscamos apoyo emocional está cambiando radicalmente. Hemos pasado de sistemas digitales rígidos a una era dominada por Modelos de Lenguaje Extensos (LLM), una tecnología que ha remodelado la interacción humana con las máquinas. Hoy, los chatbots ya no son solo herramientas que dan información; muchas personas los perciben como \"compañeros, amigos o socios\" de IA. Sin embargo, este lazo digital no está libre de peligros. Cuando estas herramientas se despliegan en situaciones de \"alta vulnerabilidad clínica\", aparecen riesgos críticos que no siempre son evidentes a simple vista. La gran pregunta que surge es si la fluidez con la que habla una IA es garantía suficiente para proteger la seguridad de un paciente en terapia.
         """,
     },
     {
-        "label": "Punto 1",
+        "label": "1",
         "title": "1. ¿Qué son los chatbots de salud mental y por qué se usan?",
         "body": """
-        Los chatbots modernos funcionan bajo principios probabilísticos. Esto significa que, aunque pueden mantener una conversación fluida y parecer empáticos, carecen de una "comprensión genuina de los hechos" o de las consecuencias que sus consejos pueden tener en la salud de una persona. El problema es que, aunque parecen entender, carecen de una "comprensión genuina de los hechos o de las consecuencias clínicas" (Chow & Li, 2025). Los usuarios a menudo confunden esta simulación de empatía con la responsabilidad profesional y asumen erróneamente que sus datos están protegidos por las mismas regulaciones que un terapeuta licenciado (Kwesi et al., 2025).
+        Los chatbots modernos funcionan bajo principios probabilísticos. Esto significa que, aunque pueden mantener una conversación fluida y parecer empáticos, carecen de una \"comprensión genuina de los hechos\" o de las consecuencias que sus consejos pueden tener en la salud de una persona. El problema es que, aunque parecen entender, carecen de una \"comprensión genuina de los hechos o de las consecuencias clínicas\" (Chow & Li, 2025). Los usuarios a menudo confunden esta simulación de empatía con la responsabilidad profesional y asumen erróneamente que sus datos están protegidos por las mismas regulaciones que un terapeuta licenciado (Kwesi et al., 2025).
         """,
     },
     {
-        "label": "Punto 2",
+        "label": "2",
         "title": "2. ¿Qué significa que una IA “alucine” y por qué importa aquí?",
         "body": """
-        En el mundo de la inteligencia artificial, una "alucinación" ocurre cuando el sistema genera información que parece lógica y correcta, pero que en realidad es falsa o no tiene sentido. En un contexto de salud mental, esto es especialmente peligroso. Las alucinaciones no son errores al azar, sino una característica de la propia naturaleza de estos modelos generativos. Los usuarios ya han empezado a notar este fenómeno, reportando "incorrecciones factuales" y llegando a sentir que su IA les está mintiendo. El riesgo clínico es real: un chatbot puede inventar datos médicos o dar consejos contraproducentes mientras mantiene un tono de voz profesional y seguro.
+        En el mundo de la inteligencia artificial, una \"alucinación\" ocurre cuando el sistema genera información que parece lógica y correcta, pero que en realidad es falsa o no tiene sentido. En un contexto de salud mental, esto es especialmente peligroso. Las alucinaciones no son errores al azar, sino una característica de la propia naturaleza de estos modelos generativos. Los usuarios ya han empezado a notar este fenómeno, reportando \"incorrecciones factuales\" y llegando a sentir que su IA les está mintiendo. El riesgo clínico es real: un chatbot puede inventar datos médicos o dar consejos contraproducentes mientras mantiene un tono de voz profesional y seguro.
         """,
     },
     {
-        "label": "Punto 3",
+        "label": "3",
         "title": "3. Sesgos: cómo aparecen y a quién pueden afectar más",
         "body": """
-        Los chatbots no son neutrales; son el reflejo de los datos con los que fueron entrenados. Esto significa que suelen arrastrar "desigualdades históricas y culturales". La literatura científica advierte que estos modelos pueden repetir estigmas y prejuicios relacionados con el género, la raza o la comunidad LGBTQ+. Un riesgo importante es la imposición de una "visión occidentalizada del bienestar". Al fallar los mecanismos de alineación, la IA ofrece consejos que carecen de sensibilidad cultural, lo que afecta desproporcionadamente a poblaciones minoritarias y viola el principio de justicia distributiva en la salud (Silveira & Paravidini, 2024; Arnaiz-Rodríguez et al., 2025).
+        Los chatbots no son neutrales; son el reflejo de los datos con los que fueron entrenados. Esto significa que suelen arrastrar \"desigualdades históricas y culturales\". La literatura científica advierte que estos modelos pueden repetir estigmas y prejuicios relacionados con el género, la raza o la comunidad LGBTQ+. Un riesgo importante es la imposición de una \"visión occidentalizada del bienestar\". Al fallar los mecanismos de alineación, la IA ofrece consejos que carecen de sensibilidad cultural, lo que afecta desproporcionadamente a poblaciones minoritarias y viola el principio de justicia distributiva en la salud (Silveira & Paravidini, 2024; Arnaiz-Rodríguez et al., 2025).
         """,
     },
     {
-        "label": "Punto 4",
+        "label": "4",
         "title": "4. Riesgos de desinformación y posibles daños",
         "body": """
         La desinformación en salud mental puede tener consecuencias físicas. Se han documentado casos donde los modelos distorsionan información sobre medicamentos o fabrican pautas de tratamiento inexistentes. En situaciones de crisis, el panorama es aún más alarmante:
@@ -265,10 +253,10 @@ sections = [
         ],
     },
     {
-        "label": "Punto 5",
+        "label": "5",
         "title": "5. Dilemas éticos y marcos de seguridad",
         "body": """
-        Uno de los mayores desafíos es la llamada "vulnerabilidad intangible". Los usuarios a menudo confunden la simulación de empatía del bot con una responsabilidad profesional real. Muchos asumen erróneamente que su privacidad está protegida por las mismas leyes que rigen a un terapeuta licenciado, como la normativa HIPAA, cuando no siempre es así. Para mitigar estos riesgos, los expertos proponen:
+        Uno de los mayores desafíos es la llamada \"vulnerabilidad intangible\". Los usuarios a menudo confunden la simulación de empatía del bot con una responsabilidad profesional real. Muchos asumen erróneamente que su privacidad está protegida por las mismas leyes que rigen a un terapeuta licenciado, como la normativa HIPAA, cuando no siempre es así. Para mitigar estos riesgos, los expertos proponen:
         """,
         "bullets": [
             "Niveles de Autonomía: La IA no debe actuar de forma autónoma en casos identificados como de alto riesgo clínico (Grabb et al., 2024).",
@@ -277,7 +265,7 @@ sections = [
         ],
     },
     {
-        "label": "Ideas clave",
+        "label": "Ideas Clave",
         "title": "Ideas Clave",
         "cards": [
             "Los chatbots de IA conversan con fluidez pero no comprenden las consecuencias clínicas de lo que dicen.",
@@ -297,68 +285,53 @@ sections = [
     {
         "label": "Referencias",
         "title": "Referencias Bibliográficas (Traducción al Español)",
-        "body": """
-        Haz clic en cada referencia para abrir su resumen exacto.
-        """,
+        "body": "Haz clic en cada referencia para abrir su resumen exacto.",
     },
 ]
 
 references = [
     {
-        "short": "Arnaiz-Rodríguez, A., et al. (2025)",
         "full": "Arnaiz-Rodríguez, A., et al. (2025). Entre la ayuda y el daño: una evaluación del manejo de crisis de salud mental por LLM.",
         "summary": "Los chatbots potenciados por modelos de lenguaje extenso han transformado la forma en que las personas buscan información en contextos de alto riesgo como la salud mental. A pesar de sus capacidades, la detección y respuesta segura a crisis como la ideación suicida y las autolesiones siguen sin estar claras debido a la falta de taxonomías unificadas. Abordamos esto creando una taxonomía de seis categorías de crisis y evaluando cinco modelos. Aunque algunos responden de manera confiable a crisis explícitas, persisten los riesgos. Muchos resultados en las categorías de autolesiones e ideación suicida son inapropiados o inseguros. Los modelos gpt-5-nano y deepseek-v3.2-exp tienen tasas de daño bajas, pero otros como gpt-4o-mini y grok-4-fast generan respuestas más inseguras.",
     },
     {
-        "short": "Blease, C. & Rodman, A. (2025)",
         "full": "Blease, C. & Rodman, A. (2025). Inteligencia Artificial Generativa en la atención de salud mental: una evaluación ética.",
         "summary": "Esta revisión busca aclarar las implicaciones éticas actuales de los chatbots utilizando principios éticos biomédicos. Estudios recientes demuestran el potencial de la IA para aprobar exámenes médicos, evaluar diagnósticos complejos y brindar atención empática. Sin embargo, se ha prestado poca atención enfocada a las consecuencias éticas para la salud mental. Esta revisión evalúa la ética de las herramientas de IA generativa y motiva a realizar más investigaciones sobre sus beneficios y daños.",
     },
     {
-        "short": "Chow, J. C. L. & Li, K. (2025)",
         "full": "Chow, J. C. L. & Li, K. (2025). Modelos de lenguaje extensos en chatbots médicos: oportunidades, desafíos y la necesidad de abordar los riesgos de la IA.",
         "summary": "Los LLM están transformando los chatbots médicos al permitir interacciones más humanas. Se utilizan en roles para pacientes (verificación de síntomas, apoyo en salud mental) y para médicos (documentación, apoyo a decisiones). No obstante, su despliegue plantea preocupaciones críticas: alucinaciones, sesgos algorítmicos, riesgos de privacidad y falta de claridad regulatoria. Abogamos por la innovación responsable y la colaboración para garantizar que se desplieguen de forma segura, equitativa y transparente.",
     },
     {
-        "short": "De Choudhury, M., Pendse, S. R. & Kumar, N. (2023)",
         "full": "De Choudhury, M., Pendse, S. R. & Kumar, N. (2023). Beneficios y daños de los modelos de lenguaje extensos en la salud mental digital.",
         "summary": "Los LLM prometen llevar la salud mental digital a territorios inexplorados. Este artículo presenta perspectivas contemporáneas sobre las oportunidades y riesgos de los LLM en el diseño e implementación de herramientas de salud mental. Se discuten áreas como los comportamientos de búsqueda de ayuda y la provisión de cuidados comunitarios e institucionales. El objetivo es ayudar a dar forma a futuros esfuerzos de defensa y regulación para crear herramientas más responsables y seguras.",
     },
     {
-        "short": "Grabb, D., Lamparth, M. & Vasan, N. (2024)",
         "full": "Grabb, D., Lamparth, M. & Vasan, N. (2024). Riesgos de los modelos de lenguaje para la atención de salud mental automatizada: ética y estructura para la implementación.",
         "summary": "Este artículo aborda los desafíos éticos de la IA autónoma en salud mental y propone un marco que delinea niveles de autonomía y requisitos éticos. Evaluamos diez modelos con preguntas sobre psicosis, manía, depresión y tendencias suicidas. Encontramos que los modelos actuales son insuficientes para igualar el estándar humano debido a respuestas demasiado cautelosas o sicofánticas y la ausencia de salvaguardas. Alarmantemente, la mayoría de los modelos podrían causar daño en emergencias de salud mental.",
     },
     {
-        "short": "Hua, Y., et al. (2024)",
         "full": "Hua, Y., et al. (2024). Trazando la evolución de los chatbots de salud mental con IA: desde sistemas basados en reglas hasta modelos de lenguaje extensos.",
         "summary": "Revisión sistemática de 160 estudios (2020-2024) que clasifica las arquitecturas de los chatbots. Mientras que los sistemas basados en reglas dominaron hasta 2023, los chatbots basados en LLM aumentaron al 45% en 2024. Sin embargo, solo el 16% de los estudios de LLM pasaron por pruebas de eficacia clínica. Existe una brecha crítica en la validación robusta de los beneficios terapéuticos. El artículo enfatiza la necesidad de evaluaciones estandarizadas para garantizar un despliegue seguro y ético.",
     },
     {
-        "short": "Kwesi, J., et al. (2025)",
         "full": "Kwesi, J., et al. (2025). Explorando las actitudes y preocupaciones de seguridad y privacidad de los usuarios hacia el uso de chatbots LLM de propósito general para la salud mental.",
         "summary": "A través de 21 entrevistas, identificamos conceptos erróneos críticos y una falta general de conciencia del riesgo. Los participantes confundieron la empatía humana de los LLM con la responsabilidad humana y creyeron erróneamente que sus interacciones estaban protegidas por regulaciones como HIPAA. Introducimos el concepto de \"vulnerabilidad intangible\", donde las revelaciones emocionales se valoran menos que los datos financieros, y proponemos recomendaciones para proteger a los usuarios.",
     },
     {
-        "short": "Londoño Villarreal, L. F. (2025)",
         "full": "Londoño Villarreal, L. F. (2025). Guía de cumplimiento: regulación de IA generativa en asesoría jurídica por chatbot en Colombia.",
         "summary": "Analiza los aspectos regulatorios y éticos de la implementación de chatbots legales en Colombia. Resalta la necesidad de incluir evaluaciones de riesgo, principios de transparencia y estándares de protección de datos. Se proponen recomendaciones prácticas para garantizar que los chatbots promuevan el acceso igualitario a la justicia respetando los derechos fundamentales.",
     },
     {
-        "short": "Massenon, R., et al. (2025)",
         "full": "Massenon, R., et al. (2025). \"Mi IA me está mintiendo\": alucinaciones de LLM reportadas por usuarios en reseñas de aplicaciones móviles de IA.",
         "summary": "Estudio empírico de 3 millones de reseñas de usuarios de 90 aplicaciones móviles de IA. La prevalencia de informes de alucinaciones fue de aproximadamente el 1.75%. La \"Incorrección Factual\" fue el tipo más reportado (38%), seguida de \"Salida sin sentido/irrelevante\" (25%) e \"Información Fabricada\" (15%). Estos hallazgos destacan la necesidad de estrategias de monitoreo y mitigación para mejorar la confianza del usuario.",
     },
     {
-        "short": "Silveira, P. V. R. & Paravidini, J. L. L. (2024)",
         "full": "Silveira, P. V. R. & Paravidini, J. L. L. (2024). Ética de la aplicación de inteligencias artificiales y chatbots en la salud mental: una perspectiva psicoanalítica.",
         "summary": "Discute las implicaciones éticas del uso de IA o chatbots terapeutas desde la perspectiva del psicoanálisis. Destaca los riesgos de daños emocionales complejos, la falta de validez de la información y la ausencia de responsabilidad de los agentes involucrados. Presenta recomendaciones para el desarrollo de IA más éticas.",
     },
 ]
 
-# -----------------------------
-# FUNCIONES DE NAVEGACIÓN
-# -----------------------------
 def go_prev():
     if st.session_state.page > 0:
         st.session_state.page -= 1
@@ -374,7 +347,7 @@ def show_reference_dialog(idx: int):
     ref = references[idx]
     st.markdown(f"### {ref['full']}")
     st.markdown("---")
-    st.write(ref["summary"])
+    st.write(f"Resumen: {ref['summary']}")
     if st.button("Cerrar", key=f"close_dialog_{idx}", use_container_width=True):
         st.session_state.selected_ref = None
         st.rerun()
@@ -382,9 +355,6 @@ def show_reference_dialog(idx: int):
 
 current = sections[st.session_state.page]
 
-# -----------------------------
-# PROGRESO
-# -----------------------------
 st.markdown(
     f"""
     <div class="progress-wrap">
@@ -394,18 +364,14 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# -----------------------------
-# CONTENIDO PRINCIPAL
-# -----------------------------
 st.markdown('<div class="section-wrap"><div class="section-card">', unsafe_allow_html=True)
 
 if st.session_state.page == 0:
-    st.markdown('<div class="eyebrow">Artículo de divulgación científica</div>', unsafe_allow_html=True)
+    st.markdown('<div class="eyebrow">ARTÍCULO DE DIVULGACIÓN CIENTÍFICA</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="hero-title">{current["title"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="quote">{current["quote"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="lead">{current["body"]}</div>', unsafe_allow_html=True)
 
-elif current["label"] == "Ideas clave":
+elif current["label"] == "Ideas Clave":
     st.markdown(f'<div class="section-title">{current["title"]}</div>', unsafe_allow_html=True)
     cols = st.columns(len(current["cards"]))
     for col, item in zip(cols, current["cards"]):
@@ -438,9 +404,6 @@ else:
 
 st.markdown('</div></div>', unsafe_allow_html=True)
 
-# -----------------------------
-# BOTONES DE NAVEGACIÓN
-# -----------------------------
 left, center, right = st.columns([1, 2, 1])
 with left:
     st.button("← Anterior", on_click=go_prev, use_container_width=True, disabled=st.session_state.page == 0)
@@ -457,15 +420,9 @@ with right:
         disabled=st.session_state.page == len(sections) - 1,
     )
 
-# -----------------------------
-# DIÁLOGO DE REFERENCIAS
-# -----------------------------
 if st.session_state.selected_ref is not None:
     show_reference_dialog(st.session_state.selected_ref)
 
-# -----------------------------
-# PIE DE APP
-# -----------------------------
 st.markdown(
     """
     <div class="footer-mini">
